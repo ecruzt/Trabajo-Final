@@ -20,10 +20,7 @@ class DataBase:
                                 Nombre TEXT,
                                 
                             )''')
-        self.conexion.commit()    
-
-
-
+        self.conexion.commit() 
     
 
 
