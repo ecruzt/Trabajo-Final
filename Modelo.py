@@ -52,14 +52,22 @@ class DataBase:
             self.cursor.executemany(sql_insert_users, val_users)
             self.conexion.commit()
     def añadir_paciente(self,paciente):
-        self.cursor.execute('''INSERT INTO pacientes 
+        self.cursor.execute('''INSERT INTO Pacientes 
                                 (Cedula, nombre, edad, Ruta_EEG,Ruta_Dicom,Diagnostico)
                                 VALUES (?, ?, ?, ?, ?,?)''',
                             (paciente.cedula, paciente.nombre, paciente.edad,
                              paciente.EEG, paciente.DICOM,paciente.Diag))
         self.conexion.commit()
+    def verificar_login(self,user,passw):
+        self.cursor.execute("SELECT COUNT(*) FROM Usuarios WHERE Usuario = ? AND Contraseña = ?",(user,passw))
+        result=self.cursor.fetchone()
+        return result[0]>0
+    
 
     
+
+
+
 
 
 
