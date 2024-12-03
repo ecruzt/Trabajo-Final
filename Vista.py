@@ -1,5 +1,5 @@
 from PyQt5.uic import loadUi
-from PyQt5.QtWidgets import QMainWindow,QDialog
+from PyQt5.QtWidgets import QMainWindow,QDialog,QMessageBox,QDialogButtonBox
 from Modelo import*
 class VentanaLogin(QDialog):
     def __init__(self,base_datos,controlador):
@@ -9,8 +9,17 @@ class VentanaLogin(QDialog):
         self.controlador=controlador
         self.setup()
     def setup(self):
-        self.buttonBox.accepted.connect(self.Aceptar_op)
-        self.buttonBox.rejected.connect(self.Cancelar_op)
+        self.buttonBox.button(QDialogButtonBox.Ok).clicked.disconnect()
+        self.buttonBox.button(QDialogButtonBox.Cancel).clicked.disconnect()
+        self.buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.Aceptar_op)
+        self.buttonBox.button(QDialogButtonBox.Cancel).clicked.connect(self.close)
+    def Mostrar_mensaje(self,titulo,mensaje):
+        msg=QMessageBox()
+        msg.setWindowTitle(titulo)
+        msg.setText(mensaje)
+        msg.setIcon(QMessageBox.Information)
+        msg.exec_()
+
     def Aceptar_op(self):
         usuario=self.lineEdit.text()
         contraseña=self.lineEdit_2.text()
@@ -18,10 +27,9 @@ class VentanaLogin(QDialog):
             self.controlador.Ver_Menu()
             self.close()
         else:
-            pass
-    def Cancelar_op(self):
-        self.lineEdit.setText("")
-        self.lineEdit_2.setText("")
+            self.Mostrar_mensaje("Error","Usuario o contraseña incorrectos")
+            self.lineEdit_2.clear()
+
 
 class VentanaMenu(QMainWindow):
     def __init__(self, base_datos):
