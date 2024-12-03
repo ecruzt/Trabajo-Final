@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>521</width>
-    <height>261</height>
+    <height>395</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -132,6 +132,19 @@
    </property>
    <property name="text">
     <string>AÑADA IMAGEN.DICOM</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="SALIR">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>270</y>
+     <width>93</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>SALIR</string>
    </property>
   </widget>
  </widget>
