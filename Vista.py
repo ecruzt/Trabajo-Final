@@ -1,5 +1,5 @@
 from PyQt5.uic import loadUi
-from PyQt5.QtWidgets import QApplication,QMainWindow,QDialog
+from PyQt5.QtWidgets import QMainWindow,QDialog
 from Modelo import*
 class VentanaLogin(QDialog):
     def __init__(self,base_datos,controlador):
@@ -29,28 +29,30 @@ class VentanaMenu(QMainWindow):
         loadUi("Menu.ui",self)
         self.db=base_datos
         self.setup()
+        self.ventana_ingreso = None
+        self.ventana_buscar=None
     def setup(self):
-        self.Agregar_paciente.clicked.connect(self.abrir_ingreso_paciente)
-        self.Buscar_paciente.clicked.connect(self.abrir_buscar_paciente)
+        self.pushButton.clicked.connect(self.abrir_ingreso_paciente)
+        self.Ventana_Menu.clicked.connect(self.abrir_buscar_paciente)
     def abrir_ingreso_paciente(self):
-        ventana_ingreso=VentanaIngreso(self)
+        self.ventana_ingreso=VentanaIngreso(self)
         self.hide()
-        ventana_ingreso.show()
+        self.ventana_ingreso.show()
     def abrir_buscar_paciente(self):
-        ventana_buscar=VentanaBusqueda(self)
+        self.ventana_buscar=VentanaBusqueda(self)
         self.hide()
-        ventana_buscar.show()
+        self.ventana_buscar.show()
 class VentanaIngreso(QDialog):
-    def __init__(self):
-        super().__init__(self)
+    def __init__(self,ventana_padre=None):
+        super().__init__()
         loadUi("Ingreso_Paciente.ui",self)
+        self.ventana_padre=ventana_padre
+        self.setup()
+    def setup(self):
+        pass
+
 class VentanaBusqueda(QDialog):
-    def __init__(self):
-        super().__init__(self)
+    def __init__(self,ventana_padre=None):
+        super().__init__()
         loadUi("Buscar_paciente.ui",self)
-
-
-
-
-
-    
+        self.ventana_padre=ventana_padre

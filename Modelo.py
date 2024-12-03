@@ -15,7 +15,6 @@ class DataBase:
         self.cursor=self.conexion.cursor()
         self.crear_tabla_login()
         self.crear_tabla_pacientes()
-        self.Tablas_vacias()
 
     def crear_tabla_login(self):
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS Usuarios (

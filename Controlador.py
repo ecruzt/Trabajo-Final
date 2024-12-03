@@ -1,5 +1,5 @@
 import sys
-from PyQt5.Qtwidgets import QApplication
+from PyQt5.QtWidgets import QApplication
 from Modelo import *
 from Vista import *
 
@@ -7,8 +7,6 @@ class Controlador:
     def __init__(self):
         self.app = QApplication(sys.argv)
         self.db = DataBase('PacientesDataBase.db')
-        # self.conectar_eventos()
-        # self.vista.cargar_pacientes()
         self.db.añadir_login()
         self.login = VentanaLogin(self.db,self)
         
@@ -16,7 +14,10 @@ class Controlador:
         self.login.show()
         self.app.exec_()
     def Ver_Menu(self):
-        self.VentanaMenu= VentanaMenu(self.db)
-        self.VentanaMenu.show()
+        self.Ventana_Menu= VentanaMenu(self.db)
+        self.Ventana_Menu.show()
 
 
+if __name__=="__main__":
+    controlador=Controlador()
+    controlador.ejecutar()
