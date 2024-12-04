@@ -40,19 +40,6 @@
      <string>BUSCAR PACIENTE</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="SALIR">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>160</y>
-      <width>93</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>SALIR</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
