@@ -147,6 +147,19 @@
     <string>SALIR</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="pushButton_3">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>270</y>
+     <width>131</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>GUARDAR PACIENTE</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
