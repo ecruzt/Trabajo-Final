@@ -1,10 +1,10 @@
 from PyQt5.uic import loadUi
-from PyQt5.QtWidgets import QMainWindow,QDialog,QMessageBox,QDialogButtonBox
+from PyQt5.QtWidgets import QMainWindow,QDialog,QMessageBox,QDialogButtonBox,QFileDialog
 from Modelo import*
 class VentanaLogin(QDialog):
     def __init__(self,base_datos,controlador):
         super().__init__()
-        loadUi(r"C:\Users\VICTUS\Desktop\UdeA\Cuarto Semestre\Informática 2\Trabajo-Final\Login.ui",self)
+        loadUi("Login.ui",self)
         self.db=base_datos
         self.controlador=controlador
         self.setup()
@@ -34,7 +34,7 @@ class VentanaLogin(QDialog):
 class VentanaMenu(QMainWindow):
     def __init__(self, base_datos):
         super().__init__()
-        loadUi(r"C:\Users\VICTUS\Desktop\UdeA\Cuarto Semestre\Informática 2\Trabajo-Final\Menu.ui", self)
+        loadUi("Menu.ui")
         self.db = base_datos
         self.setup()
         self.ventana_ingreso = None
@@ -46,44 +46,63 @@ class VentanaMenu(QMainWindow):
 
     def abrir_ingreso_paciente(self):
         self.ventana_ingreso = VentanaIngreso(self)
-        self.hide()  # Oculta la ventana del menú
+        self.hide()  
         self.ventana_ingreso.show()
 
     def abrir_buscar_paciente(self):
         self.ventana_buscar = VentanaBusqueda(self)
-        self.hide()  # Oculta la ventana del menú
+        self.hide()  
         self.ventana_buscar.show()
 
 
 class VentanaIngreso(QDialog):
     def __init__(self, ventana_padre=None):
         super().__init__()
-        loadUi(r"C:\Users\VICTUS\Desktop\UdeA\Cuarto Semestre\Informática 2\Trabajo-Final\Ingreso_Paciente.ui", self)
+        loadUi("Ingreso_Paciente.ui")
         self.ventana_padre = ventana_padre
         self.setup()
 
     def setup(self):
-        # Conecta el botón SALIR a la acción de regresar al menú
+        self.pushButton.clicked.connect(self.añadir_egg)
+        self.pushButton_2.clicked.connect(self.añadir_dicom)
+        self.pushButton_3.clicked.connect(self.guardar_paciente)
         self.SALIR.clicked.connect(self.regresar_menu)
 
     def regresar_menu(self):
-        self.close()  # Cierra la ventana actual
+        self.close()  
         if self.ventana_padre:
-            self.ventana_padre.show()  # Muestra la ventana principal
+            self.ventana_padre.show() 
+    
+    def añadir_egg(self):
+        archivo, _ = QFileDialog.getOpenFileName(self, "Seleccionar archivo EEG", "", "Archivos EEG (*.egg)")
+        if archivo:
+            self.lineEdit.setText(archivo)
+    def añadir_dicom(self):
+        archivo, _ = QFileDialog.getOpenFileName(self, "Seleccionar archivo DICOM", "", "Archivos DICOM (*.dcm)")
+        if archivo:
+            self.lineEdit_2.setText(archivo)
+    def guardar_paciente(self):
+        nombre = self.NombrePaciente.text()
+        cedula = self.CedulaPaciente.text()
+        edad = self.EdadPaciente.text()
+        eeg_ruta = self.lineEdit.text()
+        dicom_ruta = self.lineEdit_2.text()
+        diagnostico = self.DiagnosticoPaciente.text()
+        self.controlador.guardar_paciente(nombre, cedula, edad, eeg_ruta, dicom_ruta, diagnostico)
 
 
 class VentanaBusqueda(QDialog):
     def __init__(self, ventana_padre=None):
         super().__init__()
-        loadUi(r"C:\Users\VICTUS\Desktop\UdeA\Cuarto Semestre\Informática 2\Trabajo-Final\Buscar_paciente.ui", self)
+        loadUi("Buscar_paciente.ui")
         self.ventana_padre = ventana_padre
         self.setup()
 
     def setup(self):
-        # Conecta el botón SALIR a la acción de regresar al menú
+       
         self.SALIR.clicked.connect(self.regresar_menu)
 
     def regresar_menu(self):
-        self.close()  # Cierra la ventana actual
+        self.close()
         if self.ventana_padre:
-            self.ventana_padre.show()  # Muestra la ventana principal
+            self.ventana_padre.show()  

@@ -16,8 +16,12 @@ class Controlador:
     def Ver_Menu(self):
         self.Ventana_Menu= VentanaMenu(self.db)
         self.Ventana_Menu.show()
+    def guardar_paciente(self, nombre, cedula, edad, eeg_ruta, dicom_ruta, diagnostico):
+        paciente = Paciente(cedula, nombre, edad, eeg_ruta, dicom_ruta, diagnostico)
+        self.db.añadir_paciente(paciente)    
 
 
 if __name__=="__main__":
     controlador=Controlador()
     controlador.ejecutar()
+    
