@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>112</height>
+    <height>166</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,7 +26,7 @@
     <string>INGRESE CEDULA DEL PACIENTE</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QLineEdit" name="Cedula">
    <property name="geometry">
     <rect>
      <x>240</x>
@@ -39,14 +39,27 @@
   <widget class="QPushButton" name="SALIR">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>70</y>
+     <x>230</x>
+     <y>90</y>
      <width>93</width>
      <height>28</height>
     </rect>
    </property>
    <property name="text">
     <string>SALIR</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="boton_buscar">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>90</y>
+     <width>93</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>BUSCAR</string>
    </property>
   </widget>
  </widget>
