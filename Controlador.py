@@ -6,7 +6,7 @@ class Controlador:
     def __init__(self):
         # Inicializamos la aplicación y la base de datos
         self.app = QApplication(sys.argv)
-        self.db = DataBase(r'C:\Users\VICTUS\Desktop\UdeA\Cuarto Semestre\Informática 2\Trabajo-Final\PacientesDataBase.db')
+        self.db = DataBase("PacientesDataBase.db")
         self.db.añadir_login()  # Agregamos los datos de login a la base de datos
         self.login = None
         self.menu = None
@@ -25,11 +25,14 @@ class Controlador:
         self.login.close()  # Cerramos la ventana de login al abrir el menú
         self.menu.show()
 
-    def guardar_paciente(self, nombre, cedula, edad, eeg_ruta, dicom_ruta, diagnostico):
+    def guardar_paciente(self, nombre, cedula, edad, eeg_ruta, dicom_ruta):
         """Guarda un paciente en la base de datos."""
         try:
-            paciente = Paciente(cedula, nombre, edad, eeg_ruta, dicom_ruta, diagnostico)
+            paciente = Paciente(cedula, nombre, edad, eeg_ruta, dicom_ruta)
+            diagnostico=paciente.diagnosticar()
+            paciente.Diag=diagnostico
             self.db.añadir_paciente(paciente)
+            
         except Exception as e:
             print(f"Error al guardar el paciente: {e}")
 

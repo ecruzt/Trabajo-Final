@@ -121,16 +121,6 @@
     </rect>
    </property>
   </widget>
-  <widget class="QGraphicsView" name="ImagenPaciente">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>200</y>
-     <width>256</width>
-     <height>192</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLabel" name="label_6">
    <property name="geometry">
     <rect>
@@ -155,6 +145,19 @@
    </property>
    <property name="text">
     <string>SALIR</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="ImagenPaciente">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>200</y>
+     <width>221</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
    </property>
   </widget>
  </widget>

@@ -3,13 +3,15 @@ from PyQt5.QtWidgets import QMainWindow, QDialog, QMessageBox, QDialogButtonBox,
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QPixmap
 from Modelo import *
-
+import pydicom
+from pydicom.pixel_data_handlers.util import apply_windowing
+from PyQt5.QtGui import QImage
 class Vista(QMainWindow):
     def __init__(self):
         super().__init__()
         from Controlador import Controlador
         self.controlador = Controlador()  # Instancia de tu controlador
-        loadUi("C:/Users/VICTUS/Desktop/UdeA/Cuarto Semestre/Informática 2/Trabajo-Final/MainWindow.ui", self)
+        loadUi("MainWindow.ui", self)
         
         # Conectar el botón de "Buscar Paciente" con la función correspondiente
         self.Buscar_Paciente.clicked.connect(self.abrir_buscar_paciente)
@@ -21,7 +23,7 @@ class Vista(QMainWindow):
 class VentanaLogin(QDialog):
     def __init__(self, base_datos, controlador):
         super().__init__()
-        loadUi("C:/Users/VICTUS/Desktop/UdeA/Cuarto Semestre/Informática 2/Trabajo-Final/Login.ui", self)
+        loadUi("Login.ui", self)
         self.db = base_datos
         self.controlador = controlador
         self.setup()
@@ -52,7 +54,7 @@ class VentanaLogin(QDialog):
 class VentanaMenu(QMainWindow):
     def __init__(self, base_datos, controlador):
         super().__init__()
-        loadUi("C:/Users/VICTUS/Desktop/UdeA/Cuarto Semestre/Informática 2/Trabajo-Final/Menu.ui", self)
+        loadUi("Menu.ui", self)
         self.db = base_datos
         self.controlador = controlador
         self.setup()
@@ -80,7 +82,7 @@ class VentanaMenu(QMainWindow):
 class VentanaIngreso(QDialog):
     def __init__(self, controlador, ventana_padre=None):
         super().__init__()
-        loadUi("C:/Users/VICTUS/Desktop/UdeA/Cuarto Semestre/Informática 2/Trabajo-Final/Ingreso_Paciente.ui", self)
+        loadUi("Ingreso_Paciente.ui", self)
         self.ventana_padre = ventana_padre
         self.controlador = controlador
         self.setup()
@@ -127,6 +129,7 @@ class VentanaBusqueda(QDialog):
         super().__init__(parent)
         self.controlador = controlador
         self.setWindowTitle("Buscar Paciente")
+        loadUi("Buscar_paciente.ui",self)
         self.setup_ui()
 
     def setup_ui(self):
@@ -171,7 +174,7 @@ class VentanaBusqueda(QDialog):
 class VentanaInformacionPaciente(QDialog):
     def __init__(self, paciente, parent=None):
         super().__init__(parent)
-        loadUi("C:/Users/VICTUS/Desktop/UdeA/Cuarto Semestre/Informática 2/Trabajo-Final/Informacion_Paciente.ui", self)
+        loadUi("InformacionPaciente.ui", self)
         self.setWindowTitle("Información del Paciente")
         self.setup_ui(paciente)
 
@@ -186,3 +189,25 @@ class VentanaInformacionPaciente(QDialog):
             self.ImagenPaciente.setPixmap(pixmap)
         else:
             self.ImagenPaciente.clear()
+    def cargar_imagen(self,ruta):
+        if ruta.endswith('.dcm'):
+            # Cargar el archivo DICOM usando pydicom
+            dicom_data = pydicom.dcmread(ruta)
+            
+            # Acceder a la imagen (en formato numpy array)
+            img_array = dicom_data.pixel_array
+            
+            # Normalizar la imagen si es necesario
+            img_array = np.uint8(img_array / np.max(img_array) * 255)  # Normaliza la imagen
+
+            # Convertir a imagen compatible con QPixmap
+            height, width = img_array.shape
+            qimage = QImage(img_array.data, width, height, QImage.Format_Grayscale8)
+            
+            # Crear el QPixmap y mostrar la imagen
+            pixmap = QPixmap.fromImage(qimage)
+            self.ImagenPaciente.setPixmap(pixmap)
+        else:
+            # Si no es DICOM, tratar como imagen estándar
+            pixmap = QPixmap(ruta)
+            self.ImagenPaciente.setPixmap(pixmap)
