@@ -6,6 +6,12 @@ from Modelo import *
 import pydicom
 from pydicom.pixel_data_handlers.util import apply_windowing
 from PyQt5.QtGui import QImage
+from PyQt5.QtGui import QImage, QPixmap
+import numpy as np
+import scipy.io
+import matplotlib.pyplot as plt
+import os
+
 class Vista(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -189,25 +195,58 @@ class VentanaInformacionPaciente(QDialog):
             self.ImagenPaciente.setPixmap(pixmap)
         else:
             self.ImagenPaciente.clear()
-    def cargar_imagen(self,ruta):
-        if ruta.endswith('.dcm'):
-            # Cargar el archivo DICOM usando pydicom
-            dicom_data = pydicom.dcmread(ruta)
-            
-            # Acceder a la imagen (en formato numpy array)
-            img_array = dicom_data.pixel_array
-            
-            # Normalizar la imagen si es necesario
-            img_array = np.uint8(img_array / np.max(img_array) * 255)  # Normaliza la imagen
+def cargar_imagen(self, ruta):
+    if ruta.endswith('.dcm'):
+        # Cargar el archivo DICOM usando pydicom
+        dicom_data = pydicom.dcmread(ruta)
+        
+        # Acceder a la imagen (en formato numpy array)
+        img_array = dicom_data.pixel_array
+        
+        # Normalizar la imagen si es necesario
+        img_array = np.uint8(img_array / np.max(img_array) * 255)  # Normaliza la imagen
 
-            # Convertir a imagen compatible con QPixmap
-            height, width = img_array.shape
-            qimage = QImage(img_array.data, width, height, QImage.Format_Grayscale8)
-            
-            # Crear el QPixmap y mostrar la imagen
-            pixmap = QPixmap.fromImage(qimage)
-            self.ImagenPaciente.setPixmap(pixmap)
-        else:
-            # Si no es DICOM, tratar como imagen estándar
-            pixmap = QPixmap(ruta)
-            self.ImagenPaciente.setPixmap(pixmap)
+        # Convertir a imagen compatible con QPixmap
+        height, width = img_array.shape
+        qimage = QImage(img_array.data, width, height, QImage.Format_Grayscale8)
+        
+        # Crear el QPixmap y mostrar la imagen
+        pixmap = QPixmap.fromImage(qimage)
+        self.ImagenPaciente.setPixmap(pixmap)
+
+    elif ruta.endswith('.mat'):
+        try:
+            # Cargar el archivo .mat usando scipy.io
+            data = scipy.io.loadmat(ruta)
+
+            # Asumimos que la señal EEG está en una variable llamada 'EEG'
+            if 'EEG' in data:
+                eeg_signal = data['EEG']  # Obtén los datos de EEG
+                if eeg_signal.ndim > 1:
+                    eeg_signal = eeg_signal[0]  # Usamos una sola señal (si hay varias)
+
+                # Crear un gráfico a partir de la señal
+                plt.figure(figsize=(10, 4))
+                plt.plot(eeg_signal, color='blue', linewidth=1)
+                plt.title("Señal EEG")
+                plt.xlabel("Tiempo (muestras)")
+                plt.ylabel("Amplitud")
+                plt.grid(True)
+
+                # Guardar el gráfico como imagen JPG temporal
+                jpg_path = os.path.join("temp_eeg.jpg")
+                plt.savefig(jpg_path, format='jpg')
+                plt.close()
+
+                # Mostrar el JPG generado en la interfaz
+                pixmap = QPixmap(jpg_path)
+                self.ImagenPaciente.setPixmap(pixmap)
+            else:
+                print("El archivo .mat no contiene datos de EEG en la variable esperada.")
+        except Exception as e:
+            print(f"Error al procesar el archivo .mat: {e}")
+
+    else:
+        # Si no es DICOM ni MAT, tratar como imagen estándar
+        pixmap = QPixmap(ruta)
+        self.ImagenPaciente.setPixmap(pixmap)
