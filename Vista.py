@@ -1,12 +1,10 @@
 from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QMainWindow, QDialog, QMessageBox, QDialogButtonBox, QFileDialog, QLabel
-from PyQt5 import QtWidgets
-from PyQt5.QtGui import QPixmap
+from PyQt5 import QtWidgets,QtCore
+from PyQt5.QtGui import *
 from Modelo import *
 import pydicom
 from pydicom.pixel_data_handlers.util import apply_windowing
-from PyQt5.QtGui import QImage
-from PyQt5.QtGui import QImage, QPixmap
 import numpy as np
 import scipy.io
 import matplotlib.pyplot as plt
@@ -16,10 +14,10 @@ class Vista(QMainWindow):
     def __init__(self):
         super().__init__()
         from Controlador import Controlador
-        self.controlador = Controlador()  # Instancia de tu controlador
+        self.controlador = Controlador()  
         loadUi("MainWindow.ui", self)
         
-        # Conectar el botón de "Buscar Paciente" con la función correspondiente
+
         self.Buscar_Paciente.clicked.connect(self.abrir_buscar_paciente)
 
     def abrir_buscar_paciente(self):
@@ -68,10 +66,7 @@ class VentanaMenu(QMainWindow):
         self.ventana_buscar = None
 
     def setup(self):
-        # Conectar el botón de "Agregar Paciente"
         self.Agregar_Paciente.clicked.connect(self.abrir_ingreso_paciente)
-        
-        # Conectar el botón de "Buscar Paciente"
         self.Buscar_Paciente.clicked.connect(self.abrir_buscar_paciente)
 
     def abrir_ingreso_paciente(self):
@@ -113,7 +108,6 @@ class VentanaIngreso(QDialog):
         archivo, _ = QFileDialog.getOpenFileName(self, "Seleccionar archivo DICOM", "", "Archivos DICOM (*.dcm)")
         if archivo:
             self.dicom_ruta = archivo
-
     def guardar_paciente(self):
         try:
             nombre = self.lineEdit.text()
@@ -125,7 +119,7 @@ class VentanaIngreso(QDialog):
             if not all([nombre, cedula, edad, eeg_ruta, dicom_ruta]):
                 raise ValueError("Faltan datos obligatorios")
 
-            self.controlador.guardar_paciente(nombre, cedula, edad, eeg_ruta, dicom_ruta, None)
+            self.controlador.guardar_paciente(nombre, cedula, edad, eeg_ruta, dicom_ruta)
             QMessageBox.information(self, "Éxito", "Paciente guardado correctamente.")
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Error al guardar paciente: {e}")
@@ -139,114 +133,73 @@ class VentanaBusqueda(QDialog):
         self.setup_ui()
 
     def setup_ui(self):
-        # Cargar los elementos de la interfaz
-        self.lineEdit_cedula = self.findChild(QtWidgets.QLineEdit, 'Cedula')  # QLineEdit para ingresar la cédula
-        self.boton_buscar = self.findChild(QtWidgets.QPushButton, 'boton_buscar')  # Botón para buscar
-        self.boton_buscar.clicked.connect(self.buscar_paciente)  # Conectar la acción de búsqueda
         
-        self.boton_salir = self.findChild(QtWidgets.QPushButton, 'SALIR')  # Botón para salir
-        self.boton_salir.clicked.connect(self.regresar_menu)  # Conectar la acción de salir
+        self.lineEdit_cedula = self.findChild(QtWidgets.QLineEdit, 'Cedula') 
+        self.boton_buscar = self.findChild(QtWidgets.QPushButton, 'boton_buscar')  
+        self.boton_buscar.clicked.connect(self.buscar_paciente) 
+        
+        self.boton_salir = self.findChild(QtWidgets.QPushButton, 'SALIR')  
+        self.boton_salir.clicked.connect(self.regresar_menu)  
 
     def buscar_paciente(self):
-        # Obtener la cédula ingresada
         cedula = self.lineEdit_cedula.text()
-
-        # Verificar que la cédula no esté vacía
         if not cedula:
             self.show_error("Por favor ingrese la cédula.")
             return
-
-        # Buscar el paciente en la base de datos utilizando la cédula
         paciente = self.controlador.db.buscar_paciente(cedula)
-
-        if paciente:
-            # Si se encuentra al paciente, mostrar la ventana con su información
+        print(paciente)
+        if paciente:          
             ventana_info = VentanaInformacionPaciente(paciente)
-            ventana_info.exec_()  # Mostrar la ventana de información del paciente
+            ventana_info.exec_()  
         else:
-            # Si no se encuentra al paciente, mostrar un mensaje de error
+            
             self.show_error("Paciente no encontrado.")
 
     def show_error(self, mensaje):
-        # Mostrar el mensaje de error
+      
         error_label = QLabel(mensaje)
-        self.layout().addWidget(error_label)  # Añadir el mensaje al layout de la ventana
+        self.layout().addWidget(error_label)  
 
     def regresar_menu(self):
-        # Cerrar la ventana actual y regresar al menú
+
         self.close()
-
-
 class VentanaInformacionPaciente(QDialog):
     def __init__(self, paciente, parent=None):
         super().__init__(parent)
         loadUi("InformacionPaciente.ui", self)
         self.setWindowTitle("Información del Paciente")
         self.setup_ui(paciente)
+  
 
     def setup_ui(self, paciente):
         self.NombrePaciente.setText(paciente['Nombre'])
         self.CedulaPaciente.setText(str(paciente['Cedula']))
         self.EdadPaciente.setText(str(paciente['Edad']))
         self.DiagnosticoPaciente.setText(paciente['Diagnostico'])
+        self.boton_salir = self.findChild(QtWidgets.QPushButton, 'SALIR')  
+        self.boton_salir.clicked.connect(self.regresar_ventana)
         
-        if paciente.get('Ruta_Dicom'):
-            pixmap = QPixmap(paciente['Ruta_Dicom'])
-            self.ImagenPaciente.setPixmap(pixmap)
+        dicom_ruta= paciente.get('Ruta_Dicom')
+        if dicom_ruta:
+            self.cargar_imagen(dicom_ruta)
         else:
             self.ImagenPaciente.clear()
-def cargar_imagen(self, ruta):
-    if ruta.endswith('.dcm'):
-        # Cargar el archivo DICOM usando pydicom
-        dicom_data = pydicom.dcmread(ruta)
-        
-        # Acceder a la imagen (en formato numpy array)
-        img_array = dicom_data.pixel_array
-        
-        # Normalizar la imagen si es necesario
-        img_array = np.uint8(img_array / np.max(img_array) * 255)  # Normaliza la imagen
+    def regresar_ventana(self):
+        self.close()
 
-        # Convertir a imagen compatible con QPixmap
-        height, width = img_array.shape
-        qimage = QImage(img_array.data, width, height, QImage.Format_Grayscale8)
-        
-        # Crear el QPixmap y mostrar la imagen
-        pixmap = QPixmap.fromImage(qimage)
-        self.ImagenPaciente.setPixmap(pixmap)
 
-    elif ruta.endswith('.mat'):
-        try:
-            # Cargar el archivo .mat usando scipy.io
-            data = scipy.io.loadmat(ruta)
-
-            # Asumimos que la señal EEG está en una variable llamada 'EEG'
-            if 'EEG' in data:
-                eeg_signal = data['EEG']  # Obtén los datos de EEG
-                if eeg_signal.ndim > 1:
-                    eeg_signal = eeg_signal[0]  # Usamos una sola señal (si hay varias)
-
-                # Crear un gráfico a partir de la señal
-                plt.figure(figsize=(10, 4))
-                plt.plot(eeg_signal, color='blue', linewidth=1)
-                plt.title("Señal EEG")
-                plt.xlabel("Tiempo (muestras)")
-                plt.ylabel("Amplitud")
-                plt.grid(True)
-
-                # Guardar el gráfico como imagen JPG temporal
-                jpg_path = os.path.join("temp_eeg.jpg")
-                plt.savefig(jpg_path, format='jpg')
-                plt.close()
-
-                # Mostrar el JPG generado en la interfaz
-                pixmap = QPixmap(jpg_path)
-                self.ImagenPaciente.setPixmap(pixmap)
-            else:
-                print("El archivo .mat no contiene datos de EEG en la variable esperada.")
-        except Exception as e:
-            print(f"Error al procesar el archivo .mat: {e}")
-
-    else:
-        # Si no es DICOM ni MAT, tratar como imagen estándar
-        pixmap = QPixmap(ruta)
-        self.ImagenPaciente.setPixmap(pixmap)
+    def cargar_imagen(self, ruta):
+        if ruta.endswith('.dcm'):
+           
+            dicom_data = pydicom.dcmread(ruta)
+            img_array = dicom_data.pixel_array
+            img_array = np.uint8(img_array / np.max(img_array) * 255)  
+            height, width = img_array.shape
+            qimage = QImage(img_array.data, width, height, QImage.Format_Grayscale8)
+            pixmap = QPixmap.fromImage(qimage)
+            pixmap = pixmap.scaled(self.ImagenPaciente.size(), QtCore.Qt.KeepAspectRatio)
+            self.ImagenPaciente.setPixmap(pixmap)
+            self.ImagenPaciente.setAlignment(QtCore.Qt.AlignCenter)
+        else:
+            pixmap = QPixmap(ruta)
+            self.ImagenPaciente.setPixmap(pixmap)

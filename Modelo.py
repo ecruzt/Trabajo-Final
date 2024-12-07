@@ -64,7 +64,9 @@ class Paciente:
 
     def diagnosticar(self):
         eeg_features = self.procesar_eeg()
+        print(f"Características del EEG: {eeg_features}")
         hippocampus_volume = self.procesar_dicom()
+        print(f"Volumen del hipocampo: {hippocampus_volume}")
 
         if eeg_features is None or hippocampus_volume is None:
             self.Diag = "Datos insuficientes para diagnóstico"
