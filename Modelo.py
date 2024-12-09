@@ -1,5 +1,6 @@
 import sqlite3
 import numpy as np
+import matplotlib.pyplot as plt
 from scipy.io import loadmat
 import pydicom
 
@@ -118,7 +119,7 @@ class Paciente:
 
             plt.tight_layout()
             plt.show()
-            
+
         except Exception as e:
             print(f"Error graficando: {e}")
 
