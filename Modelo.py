@@ -85,7 +85,39 @@ class Paciente:
                 self.Diag = "No Alzheimer"
 
         return self.Diag
+    def graficar(self):
+        try:
+        
+            eeg_features = self.procesar_eeg()
+            if eeg_features is None:
+                print("No se pudieron calcular las características del EEG.")
+                return
 
+            
+            bandas = ['alpha_mean', 'beta_mean', 'theta_mean', 'delta_mean']
+            potencias = [eeg_features[banda] for banda in bandas]
+            colores = ['blue', 'red', 'green', 'purple']
+
+            plt.figure(figsize=(12, 6))
+
+            
+            plt.subplot(1, 2, 1)
+            plt.bar(bandas, potencias, color=colores)
+            plt.title('Distribución de Potencias por Bandas de Frecuencia')
+            plt.ylabel('Potencia Relativa (%)')
+            plt.grid(axis='y')
+
+            
+            dicom_data = pydicom.dcmread(self.DICOM)
+            pixel_array = dicom_data.pixel_array
+
+            plt.subplot(1, 2, 2)
+            plt.imshow(pixel_array, cmap='gray')
+            plt.title('Imagen DICOM')
+            plt.axis('off')
+
+            plt.tight_layout()
+            plt.show()
 
 class DataBase:
     def __init__(self, nombre_archivo):
