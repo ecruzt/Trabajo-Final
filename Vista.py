@@ -1,14 +1,11 @@
 from PyQt5.uic import loadUi
-from PyQt5.QtWidgets import QMainWindow, QDialog, QMessageBox, QDialogButtonBox, QFileDialog, QLabel
+from PyQt5.QtWidgets import QMainWindow, QDialog, QMessageBox, QDialogButtonBox, QFileDialog, QLabel,QWidget
 from PyQt5 import QtWidgets,QtCore
 from PyQt5.QtGui import *
 from Modelo import *
 import pydicom
-from pydicom.pixel_data_handlers.util import apply_windowing
 import numpy as np
-import scipy.io
-import matplotlib.pyplot as plt
-import os
+
 
 class Vista(QMainWindow):
     def __init__(self):
@@ -167,8 +164,10 @@ class VentanaInformacionPaciente(QDialog):
     def __init__(self, paciente, parent=None):
         super().__init__(parent)
         loadUi("InformacionPaciente.ui", self)
+        self.paciente=paciente
         self.setWindowTitle("Información del Paciente")
         self.setup_ui(paciente)
+        
   
 
     def setup_ui(self, paciente):
@@ -184,6 +183,7 @@ class VentanaInformacionPaciente(QDialog):
             self.cargar_imagen(dicom_ruta)
         else:
             self.ImagenPaciente.clear()
+
     def regresar_ventana(self):
         self.close()
 
