@@ -118,6 +118,9 @@ class Paciente:
 
             plt.tight_layout()
             plt.show()
+            
+        except Exception as e:
+            print(f"Error graficando: {e}")
 
 class DataBase:
     def __init__(self, nombre_archivo):
