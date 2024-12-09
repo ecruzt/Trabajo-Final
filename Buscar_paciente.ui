@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>INGRESE CEDULA DEL PACIENTE</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;INGRESE CEDULA DEL PACIENTE&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="Cedula">
@@ -62,7 +62,47 @@
     <string>BUSCAR</string>
    </property>
   </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>-190</x>
+     <y>-10</y>
+     <width>661</width>
+     <height>211</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">image: url(:/img/file - copia.jpg);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>106</x>
+     <y>-68</y>
+     <width>301</width>
+     <height>231</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">image: url(:/img/file - copia.jpg);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <zorder>label_2</zorder>
+  <zorder>label</zorder>
+  <zorder>textoingresarcedula</zorder>
+  <zorder>Cedula</zorder>
+  <zorder>SALIR</zorder>
+  <zorder>boton_buscar</zorder>
  </widget>
- <resources/>
+ <resources>
+  <include location="Nuevo documento de texto.qrc"/>
+ </resources>
  <connections/>
 </ui>

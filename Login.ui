@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>371</width>
-    <height>253</height>
+    <height>257</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -48,7 +48,7 @@
     </font>
    </property>
    <property name="text">
-    <string>USUARIO</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;USUARIO&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
@@ -67,7 +67,7 @@
     </font>
    </property>
    <property name="text">
-    <string>CONTRASEÑA</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;CONTRASEÑA&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="lineEdit">
@@ -90,6 +90,40 @@
     </rect>
    </property>
   </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>-180</x>
+     <y>0</y>
+     <width>521</width>
+     <height>251</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">image: url(:/img/file - copia.jpg);</string>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>0</y>
+     <width>331</width>
+     <height>251</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">image: url(:/img/file - copia.jpg);</string>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <zorder>label_4</zorder>
+  <zorder>label_3</zorder>
   <zorder>lineEdit</zorder>
   <zorder>buttonBox</zorder>
   <zorder>label</zorder>
@@ -100,7 +134,9 @@
   <tabstop>lineEdit</tabstop>
   <tabstop>lineEdit_2</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="Nuevo documento de texto.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

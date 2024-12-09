@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>DATOS DEL PACIENTE</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;DATOS DEL PACIENTE&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
@@ -36,7 +36,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Nombre:</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;Nombre:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="NombrePaciente">
@@ -59,7 +59,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Cedula:</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;Cedula:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="CedulaPaciente">
@@ -82,7 +82,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Edad:</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;Edad:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="EdadPaciente">
@@ -108,7 +108,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Diagnostico:</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;Diagnostico:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="DiagnosticoPaciente">
@@ -160,7 +160,55 @@
     <string>TextLabel</string>
    </property>
   </widget>
+  <widget class="QLabel" name="label_7">
+   <property name="geometry">
+    <rect>
+     <x>-10</x>
+     <y>-180</y>
+     <width>331</width>
+     <height>611</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">image: url(:/img/file - copia.jpg);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_8">
+   <property name="geometry">
+    <rect>
+     <x>-10</x>
+     <y>170</y>
+     <width>341</width>
+     <height>401</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">image: url(:/img/file - copia.jpg);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <zorder>label_8</zorder>
+  <zorder>label_7</zorder>
+  <zorder>label</zorder>
+  <zorder>label_2</zorder>
+  <zorder>NombrePaciente</zorder>
+  <zorder>label_3</zorder>
+  <zorder>CedulaPaciente</zorder>
+  <zorder>label_4</zorder>
+  <zorder>EdadPaciente</zorder>
+  <zorder>label_5</zorder>
+  <zorder>DiagnosticoPaciente</zorder>
+  <zorder>label_6</zorder>
+  <zorder>SALIR</zorder>
+  <zorder>ImagenPaciente</zorder>
  </widget>
- <resources/>
+ <resources>
+  <include location="Nuevo documento de texto.qrc"/>
+ </resources>
  <connections/>
 </ui>
