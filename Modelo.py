@@ -20,6 +20,7 @@ class Paciente:
         }
 
     def procesar_eeg(self):
+        """Procesa el archivo EEG""" 
         try:
             data = loadmat(self.EEG)
             eeg_data = data['EEG']  
@@ -46,6 +47,7 @@ class Paciente:
             return None
 
     def procesar_dicom(self, threshold_percentile=90):
+        """Procesa el archivo Dicom""" 
         try:
             dicom_data = pydicom.dcmread(self.DICOM)
             pixel_array = dicom_data.pixel_array
@@ -64,6 +66,7 @@ class Paciente:
             return None
 
     def diagnosticar(self):
+        """Determina si el paciente tiene o no Alzheimer""" 
         eeg_features = self.procesar_eeg()
         print(f"Características del EEG: {eeg_features}")
         hippocampus_volume = self.procesar_dicom()
@@ -86,42 +89,6 @@ class Paciente:
                 self.Diag = "No Alzheimer"
 
         return self.Diag
-    def graficar(self):
-        try:
-        
-            eeg_features = self.procesar_eeg()
-            if eeg_features is None:
-                print("No se pudieron calcular las características del EEG.")
-                return
-
-            
-            bandas = ['alpha_mean', 'beta_mean', 'theta_mean', 'delta_mean']
-            potencias = [eeg_features[banda] for banda in bandas]
-            colores = ['blue', 'red', 'green', 'purple']
-
-            plt.figure(figsize=(12, 6))
-
-            
-            plt.subplot(1, 2, 1)
-            plt.bar(bandas, potencias, color=colores)
-            plt.title('Distribución de Potencias por Bandas de Frecuencia')
-            plt.ylabel('Potencia Relativa (%)')
-            plt.grid(axis='y')
-
-            
-            dicom_data = pydicom.dcmread(self.DICOM)
-            pixel_array = dicom_data.pixel_array
-
-            plt.subplot(1, 2, 2)
-            plt.imshow(pixel_array, cmap='gray')
-            plt.title('Imagen DICOM')
-            plt.axis('off')
-
-            plt.tight_layout()
-            plt.show()
-            
-        except Exception as e:
-            print(f"Error graficando: {e}")
 
 class DataBase:
     def __init__(self, nombre_archivo):
@@ -137,6 +104,7 @@ class DataBase:
             self.cursor = None
 
     def crear_tabla_login(self):
+        """Si no existe crea una tabla para el inicio de sesión en la base de datos """
         try:
             self.cursor.execute('''CREATE TABLE IF NOT EXISTS Usuarios (
                                     Usuario TEXT,
@@ -147,6 +115,7 @@ class DataBase:
             print(f"Error al crear la tabla de login: {e}")
 
     def crear_tabla_pacientes(self):
+        """Si no existe crea una tabla con los datos de los pacientes en la base de datos"""
         try:
             self.cursor.execute('''CREATE TABLE IF NOT EXISTS Pacientes (
                                     Cedula INTEGER,
@@ -161,6 +130,7 @@ class DataBase:
             print(f"Error al crear la tabla de pacientes: {e}")
 
     def Tablas_vacias(self, tabla):
+        """Verifica que una tabla está vacia"""
         try:
             self.cursor.execute(f"SELECT COUNT(*) FROM {tabla}")
             espacio = self.cursor.fetchone()[0]
@@ -170,6 +140,7 @@ class DataBase:
             return False
 
     def añadir_login(self):
+        """Añade los usuarios y contraseñas predefinidos en la tabla de Usuarios"""
         try:
             if self.Tablas_vacias("Usuarios"):
                 sql_insert_users = """INSERT INTO Usuarios (Usuario, Contraseña)  
@@ -187,6 +158,7 @@ class DataBase:
             print(f"Error al añadir usuarios de login: {e}")
 
     def añadir_paciente(self, paciente):
+        """Añade un paciente a la tabla de Pacientes segun los datos entregados"""
         try:
             self.cursor.execute('''INSERT INTO Pacientes 
                                     (Cedula, Nombre, Edad, Ruta_EEG, Ruta_Dicom, Diagnostico)
@@ -198,6 +170,7 @@ class DataBase:
             print(f"Error al añadir paciente: {e}")
 
     def verificar_login(self, user, passw):
+        """Verifica que el usuario y contraseña ingresado sean validos"""
         try:
             self.cursor.execute("SELECT COUNT(*) FROM Usuarios WHERE Usuario = ? AND Contraseña = ?", (user, passw))
             result = self.cursor.fetchone()
@@ -207,6 +180,7 @@ class DataBase:
             return False
 
     def buscar_paciente(self, cedula):
+        """Busca a un paciente en la base de datos según su cédula"""
         try:
             self.cursor.execute("SELECT * FROM Pacientes WHERE Cedula = ?", (cedula,))
             paciente = self.cursor.fetchone()

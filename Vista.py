@@ -6,21 +6,6 @@ from Modelo import *
 import pydicom
 import numpy as np
 
-
-class Vista(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        from Controlador import Controlador
-        self.controlador = Controlador()  
-        loadUi("MainWindow.ui", self)
-        
-
-        self.Buscar_Paciente.clicked.connect(self.abrir_buscar_paciente)
-
-    def abrir_buscar_paciente(self):
-        self.ventana_buscar = VentanaBusqueda(self.controlador)
-        self.ventana_buscar.show()
-
 class VentanaLogin(QDialog):
     def __init__(self, base_datos, controlador):
         super().__init__()
@@ -36,6 +21,7 @@ class VentanaLogin(QDialog):
         self.buttonBox.button(QDialogButtonBox.Cancel).clicked.connect(self.close)
 
     def Mostrar_mensaje(self, titulo, mensaje):
+        """Muestra una ventana con el mensaje entregado"""
         msg = QMessageBox()
         msg.setWindowTitle(titulo)
         msg.setText(mensaje)
@@ -43,6 +29,7 @@ class VentanaLogin(QDialog):
         msg.exec_()
 
     def Aceptar_op(self):
+        """Lógica del botón aceptar"""
         usuario = self.lineEdit.text()
         contraseña = self.lineEdit_2.text()
         if self.db.verificar_login(usuario, contraseña):
@@ -67,11 +54,13 @@ class VentanaMenu(QMainWindow):
         self.Buscar_Paciente.clicked.connect(self.abrir_buscar_paciente)
 
     def abrir_ingreso_paciente(self):
+        """Abre la ventana para ingresar un nuevo paciente"""
         self.ventana_ingreso = VentanaIngreso(self.controlador, self)
         self.hide()
         self.ventana_ingreso.show()
 
     def abrir_buscar_paciente(self):
+        """Abre la ventana para buscar a un paciente"""
         self.ventana_buscar = VentanaBusqueda(self.controlador)
         self.hide()
         self.ventana_buscar.show()
@@ -92,20 +81,24 @@ class VentanaIngreso(QDialog):
         self.SALIR.clicked.connect(self.regresar_menu)
 
     def regresar_menu(self):
+        """Lógica del botón para salir, regresa al Menú principal"""
         self.close()
         if self.ventana_padre:
             self.ventana_padre.show()
 
     def agregar_eeg(self):
+        """Permite buscar y añadir a la base de datos un archivo EEG"""
         archivo, _ = QFileDialog.getOpenFileName(self, "Seleccionar archivo EEG", "", "Archivos EEG (*.mat)")
         if archivo:
             self.eeg_ruta = archivo
 
     def agregar_dicom(self):
+        """Permite buscar y añadir a la base de datos un archivo DICOM"""
         archivo, _ = QFileDialog.getOpenFileName(self, "Seleccionar archivo DICOM", "", "Archivos DICOM (*.dcm)")
         if archivo:
             self.dicom_ruta = archivo
     def guardar_paciente(self):
+        """Guarda los datos ingresados del paciente"""
         try:
             nombre = self.lineEdit.text()
             cedula = int(self.lineEdit_2.text())
@@ -139,6 +132,8 @@ class VentanaBusqueda(QDialog):
         self.boton_salir.clicked.connect(self.regresar_menu)  
 
     def buscar_paciente(self):
+        """Busca a un paciente por su cédula y abre la ventana de su información"""
+
         cedula = self.lineEdit_cedula.text()
         if not cedula:
             self.show_error("Por favor ingrese la cédula.")
@@ -149,16 +144,17 @@ class VentanaBusqueda(QDialog):
             ventana_info = VentanaInformacionPaciente(paciente)
             ventana_info.exec_()  
         else:
-            
             self.show_error("Paciente no encontrado.")
 
     def show_error(self, mensaje):
-      
-        error_label = QLabel(mensaje)
-        self.layout().addWidget(error_label)  
-
+        """Muestra un ventana con el mensaje de error asignado"""
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Critical)  
+        msg_box.setWindowTitle("Error")
+        msg_box.setText(mensaje)
+        msg_box.exec_()  
     def regresar_menu(self):
-
+        """Cierra la ventana y regresa al menú"""
         self.close()
 class VentanaInformacionPaciente(QDialog):
     def __init__(self, paciente, parent=None):
@@ -185,10 +181,13 @@ class VentanaInformacionPaciente(QDialog):
             self.ImagenPaciente.clear()
 
     def regresar_ventana(self):
+        """Cierra la ventana"""        
         self.close()
 
 
     def cargar_imagen(self, ruta):
+        """Convierte imagenes Dicom en imagenes que pueden ser leidas y utilizadas por QtDesigner""" 
+        
         if ruta.endswith('.dcm'):
            
             dicom_data = pydicom.dcmread(ruta)
